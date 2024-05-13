@@ -1,33 +1,21 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const app = express();
 
-// Ex 1 - using middleware, next()...
-// app.use((req, res, next) => {
-//     console.log('##Middleware 1');
-//     next();
-// });
+app.use(bodyParser.urlencoded({extended: true}));
 
-// app.use((req, res, next) => {
-//     console.log('##Middleware 2');
-//     res.send('<h1>Hello Express.js response ;)</h1>');
-// });
-
-
-// Ex 2
-app.use('/', (req, res, next) => {
-    console.log('##This runs on every request ;)');
-    next(); // go further ;)
+app.use('/add-product', (req, res, next) => {
+    res.send('<form action="/product" method="POST"><input type="text" name="title"><button type="submit">Add product</button></form>');
 });
 
-app.use('/test', (req, res, next) => {
-    console.log('##Middleware test ;)');
-    res.send('<h1>Test route</h1>');
+app.post('/product', (req, res, next) => {
+    console.log('##req body', req.body);
+    res.redirect('/');
 });
 
 app.use('/', (req, res, next) => {
-    console.log('##Middleware default ;)');
-    res.send('<h1>Any other route</h1>');
+    res.status(404).send('<h1>Page not found</h1>');
 });
 
 
